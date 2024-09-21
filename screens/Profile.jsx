@@ -11,6 +11,7 @@ import { useAuthStore } from "../stores";
 import { stackRoutesNames } from "../routers/stackRoutesNames";
 import { navigate } from "../helpers";
 import * as ImagePicker from "expo-image-picker";
+import * as Linking from "expo-linking";
 import { api } from "../axios";
 
 const { height, width } = Dimensions.get("window");
@@ -40,6 +41,7 @@ const Profile = () => {
       let result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
+        cameraType: "front",
         aspect: [4, 3],
         quality: 0.5,
       });
@@ -79,7 +81,7 @@ const Profile = () => {
             title: "Soporte",
             iconName: "support-agent",
             fontFamily: "MaterialIcons",
-            action: () => {},
+            action: () => Linking.openURL("mailto:miqueasledesmadev@gmail.com"),
           },
           {
             title: "Información",
@@ -150,27 +152,30 @@ const Profile = () => {
         {user.userName}
       </Text>
 
-      <Image
-        source={require("../resources/verified_icon.png")}
-        h={25}
-        w={25}
-        alignSelf="center"
-      />
-
-      <Button
-        onPress={() => navigate(stackRoutesNames.VERIFICATION)}
-        alignSelf="center"
-        mt={"xl"}
-        bg="primary"
-        color="#000"
-        fontFamily="Bold"
-        rounded={10}
-        fontSize={16}
-      >
-        ¡Ofrecer servicios!
-      </Button>
+      {user.role !== "USER_TAROT" ? (
+        <Button
+          onPress={() => navigate(stackRoutesNames.VERIFICATION)}
+          alignSelf="center"
+          mt={"xl"}
+          bg="primary"
+          color="#000"
+          fontFamily="Bold"
+          rounded={10}
+          fontSize={16}
+        >
+          ¡Ofrecer servicios!
+        </Button>
+      ) : (
+        <Image
+          source={require("../resources/verified_icon.png")}
+          h={25}
+          w={25}
+          alignSelf="center"
+        />
+      )}
 
       <SectionList
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={style.listContainer}
         sections={data}
         keyExtractor={(item, index) => item.title + index}

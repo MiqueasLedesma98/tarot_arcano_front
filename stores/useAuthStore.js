@@ -12,7 +12,8 @@ const useAuthStore = create((set) => ({
       set({ auth: false, token: null, userInfo: null });
       return;
     }
-    await api.setToken(token, user);
+
+    await api.setToken({ token, user });
     set({ auth: true, token, userInfo: user });
   },
   logout: async () => {
@@ -22,7 +23,7 @@ const useAuthStore = create((set) => ({
   restoreSession: async ({ auth, token, userInfo }) => {
     const promises = [];
 
-    if (token) promises.push(SecureStore.setItemAsync("token", token));
+    if (token) promises.push(SecureStore.setItemAsync("x-token", token));
     if (userInfo)
       promises.push(SecureStore.setItemAsync("user", JSON.stringify(userInfo)));
 

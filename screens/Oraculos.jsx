@@ -83,7 +83,7 @@ const Oraculos = () => {
             placeholder="Haz tu pregunta"
             fontFamily="Regular"
             color="gray"
-            h={38}
+            h={40}
             w={"90%"}
             suffix={
               loading ? (

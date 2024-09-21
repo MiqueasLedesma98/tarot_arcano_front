@@ -21,6 +21,7 @@ import { useEffect, useState, useCallback, useMemo } from "react";
  * @property {function(): void} clear - Función usada para limpiar el formulario.
  * @property {function(Object): void} register - Función para setear formulario a cualquier valor.
  * @property {function(String): void} handleChange - Función para manejar inputs de tipo texto o que devuelvan un valor que se guarde sin editar.
+ * @property {boolean} ready - Indica si el formulario está listo para ser enviado (no tiene errores y el estado es diferente de los valores iniciales).
  */
 
 /**
@@ -80,6 +81,14 @@ const useForm = ({ validations = {}, initialValues = {} }) => {
     setState(newState);
   }, []);
 
+  // Calcular la propiedad 'ready'
+  const ready = useMemo(() => {
+    const noErrors = Object.keys(errors).length === 0;
+    const stateChanged =
+      JSON.stringify(state) !== JSON.stringify(memoizedInitialValues);
+    return noErrors && stateChanged;
+  }, [errors, state, memoizedInitialValues]);
+
   return {
     register,
     form: state,
@@ -87,6 +96,7 @@ const useForm = ({ validations = {}, initialValues = {} }) => {
     handleChange,
     errors,
     clear,
+    ready,
   };
 };
 

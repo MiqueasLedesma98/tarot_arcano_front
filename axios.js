@@ -4,7 +4,7 @@ import { Alert } from "react-native";
 
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
-const getToken = async () => await SecureStore.getItemAsync("token");
+const getToken = async () => await SecureStore.getItemAsync("x-token");
 
 const getUser = async () => {
   const userInJSON = await SecureStore.getItemAsync("user");
@@ -37,7 +37,6 @@ class ApiQuery {
       });
       return data;
     } catch (error) {
-      console.log(error);
       Alert.alert("¡Error!", error.response.data.msg ?? error.message);
       return {};
     }
@@ -65,7 +64,7 @@ class ApiQuery {
     }
   }
 
-  async setToken(token, user) {
+  async setToken({ token, user }) {
     await SecureStore.setItemAsync("x-token", token);
     await SecureStore.setItemAsync("user", JSON.stringify(user));
     this.axios.defaults.headers.common["x-token"] = token;
@@ -85,10 +84,12 @@ class ApiQuery {
           await restoreSession(session);
         } else {
           const [token, userInfo] = await Promise.all([getToken(), getUser()]);
+
           this.axios.defaults.headers.common["x-token"] = token;
           await restoreSession({ auth: token && userInfo, token, userInfo });
         }
       } catch (error) {
+        await this.deleteToken();
         console.log(error);
       }
     }

@@ -24,7 +24,7 @@ const Review = ({ data = {} }) => {
           fontSize={22}
           color="primary"
         />
-        <Text mx={"xs"}>4.7</Text>
+        <Text mx={"xs"}>{data?.rate ?? "-/-"}</Text>
       </Box>
       <Text my={"lg"} fontFamily="Regular" color="gray" fontSize={"lg"}>
         {data?.message ?? "..."}

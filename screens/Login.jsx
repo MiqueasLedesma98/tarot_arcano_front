@@ -34,8 +34,6 @@ const Login = ({ navigation }) => {
 
   useEffect(() => {
     const handleLoguinGoogle = (session) => {
-      console.log({ session });
-
       WebBrowser.dismissBrowser();
 
       api.loadCredentials(restoreSession, session);
@@ -151,7 +149,7 @@ const Login = ({ navigation }) => {
         rounded={15}
         onPress={() =>
           WebBrowser.openAuthSessionAsync(
-            `https://4c5svf64-4040.brs.devtunnels.ms?id=${socket.id}`
+            `${process.env.EXPO_PUBLIC_WEB_URL}?id=${socket.id}`
           )
         }
         alignSelf="center"

@@ -2,7 +2,14 @@ import React, { useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useAuthStore } from "../stores";
 import { api } from "../axios";
-import { Login, Recover, Register, Verification, Welcome } from "../screens";
+import {
+  Login,
+  PayService,
+  Recover,
+  Register,
+  Verification,
+  Welcome,
+} from "../screens";
 import { stackRoutesNames } from "./stackRoutesNames";
 import BottomNavigation from "./BottomNavigation";
 import { SocketProvider } from "../contexts";
@@ -48,6 +55,12 @@ const StackRoutes = {
   DETAILS: {
     name: stackRoutesNames.DETAILS,
     Component: Details,
+    auth: true,
+    header: false,
+  },
+  PAY_SERVICE: {
+    name: stackRoutesNames.PAY_SERVICE,
+    Component: PayService,
     auth: true,
     header: false,
   },

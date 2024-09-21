@@ -171,7 +171,7 @@ const Register = () => {
       <Button
         onPress={() =>
           WebBrowser.openAuthSessionAsync(
-            `https://4c5svf64-4040.brs.devtunnels.ms?id=${socket.id}`
+            `${process.env.EXPO_PUBLIC_WEB_URL}?id=${socket.id}`
           )
         }
         w={"90%"}

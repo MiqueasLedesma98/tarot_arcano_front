@@ -1,8 +1,19 @@
 import React from "react";
 import { Box, Button, Icon, Image, Skeleton, Text } from "react-native-magnus";
 import { InfinityScroll, Filter } from "../components";
+import { useFetch } from "../hooks";
+import { ActivityIndicator, Pressable } from "react-native";
+import { navigate } from "../helpers";
+import { stackRoutesNames } from "../routers/stackRoutesNames";
+
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 const Home = () => {
+  const { data: last_adquires = [], loading } = useFetch({
+    fetch: true,
+    url: "/services/last_adquires",
+  });
+
   return (
     <Box flex={1} w={"90%"} alignSelf="center">
       <Button bg="transparent">
@@ -23,25 +34,32 @@ const Home = () => {
         alignSelf="center"
         justifyContent="center"
       >
-        <Text fontSize={"md"} fontFamily="Medium" color="gray">
-          Últimas contrataciones
-        </Text>
+        {!loading && last_adquires[0] && (
+          <Text fontSize={"md"} fontFamily="Medium" color="gray">
+            Últimas contrataciones
+          </Text>
+        )}
 
         <Box flexDir="row">
-          {Array(4)
-            .fill("avatars")
-            .map((e, i) => (
+          {loading && <ActivityIndicator size={"small"} color={"#000"} />}
+          {last_adquires?.map((data, i) => (
+            <Pressable
+              key={data._id + i}
+              onPress={() => navigate(stackRoutesNames.DETAILS, { data })}
+            >
               <Image
                 rounded={50}
+                resizeMode="contained"
                 mr={"lg"}
                 my={"lg"}
-                key={e + i}
-                source={{ uri: "https://picsum.photos/150/150" }}
+                key={data._id}
+                source={{ uri: apiUrl + `/uploads/service/${data._id}` }}
                 w={45}
                 h={45}
                 loadingIndicatorSource={<Skeleton.Circle h={45} w={45} />}
               />
-            ))}
+            </Pressable>
+          ))}
         </Box>
         <Text fontFamily="Bold" mb={15} fontSize={"lg"}>
           ¡Encuentra los mejores tarotistas!

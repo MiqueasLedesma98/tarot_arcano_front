@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { api } from "../axios";
+import { useAuthStore } from "../stores";
 
 const useFetch = ({
   url = "",
@@ -14,6 +15,8 @@ const useFetch = ({
   const [localPage, setLocalPage] = useState(0); // Estado de página para getMore
   const [currentFilters, setCurrentFilters] = useState(filters); // Estado de filtros
 
+  const auth = useAuthStore((state) => state.auth);
+
   // Solo actualizamos los filtros si realmente cambiaron
   useEffect(() => {
     setCurrentFilters((prevFilters) => {
@@ -26,45 +29,53 @@ const useFetch = ({
   }, [filters]);
 
   const getData = useCallback(async () => {
-    setLoading(true);
-    setNoMore(false);
-    setLocalPage(1);
+    if (!auth) return;
+    try {
+      setLoading(true);
+      setNoMore(false);
+      setLocalPage(1);
 
-    const values = [url];
-    if (withFilters) {
-      values.push({ ...currentFilters, page: 1 }); // Forzar la página 1 si withFilters es true
-    } else {
-      values.push(currentFilters);
+      const values = [url];
+      if (withFilters) {
+        values.push({ ...currentFilters, page: 1 }); // Forzar la página 1 si withFilters es true
+      } else {
+        values.push(currentFilters);
+      }
+
+      const res = await api.GET(...values);
+      if (res) setData(res);
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
     }
-
-    const res = await api.GET(...values);
-    if (res) setData(res);
-
-    setLoading(false);
-  }, [url, currentFilters, withFilters, ...dependencies]);
+  }, [url, currentFilters, withFilters, auth, ...dependencies]);
 
   const getMore = useCallback(async () => {
-    if (loading || noMore) return;
-    setLoading(true);
+    if (!auth) return;
+    try {
+      if (loading || noMore) return;
+      setLoading(true);
 
-    const nextPage = localPage + 1;
-    const res = await api.GET(url, { ...currentFilters, page: nextPage }); // Usar la página local para cargar más
+      const nextPage = localPage + 1;
+      const res = await api.GET(url, { ...currentFilters, page: nextPage }); // Usar la página local para cargar más
 
-    if (!res || res.length === 0) {
-      setNoMore(true);
+      if (!res || res.length === 0) {
+        setNoMore(true);
+        setLoading(false);
+        return;
+      }
+
+      setLocalPage(nextPage); // Actualizar la página local
+      setData((prev) => [...prev, ...res]);
       setLoading(false);
-      return;
+    } catch (error) {
+      console.error(error);
     }
-
-    console.log({ nextPage });
-
-    setLocalPage(nextPage); // Actualizar la página local
-    setData((prev) => [...prev, ...res]);
-    setLoading(false);
   }, [url, currentFilters, loading, noMore, localPage, ...dependencies]);
 
   useEffect(() => {
     if (fetch) getData();
+    if (!fetch) setData([]);
   }, [fetch, url, currentFilters, ...dependencies]);
 
   return { data, reload: getData, setData, loading, getMore, noMore };

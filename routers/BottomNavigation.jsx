@@ -8,6 +8,7 @@ const genericHeader = () => <Header pt={"2xl"} shadow={"none"} />;
 
 const BottomRoutes = {
   HOME: {
+    unmountOnBlur: false,
     name: "Inicio",
     Component: Home,
     header: HeaderDetails,
@@ -18,8 +19,9 @@ const BottomRoutes = {
     label: "Inicio",
   },
   ORACULOS: {
+    unmountOnBlur: true,
     Component: Oraculos,
-    header: () => <></>,
+    // header: () => <></>,
     name: "oraculos",
     icon: {
       name: "sunny",
@@ -28,16 +30,18 @@ const BottomRoutes = {
     label: "Oraculos",
   },
   ORACULOS2: {
+    unmountOnBlur: true,
     Component: Oraculos2,
-    header: genericHeader,
+    // header: () => <></>,
     name: "oraculos2",
     icon: {
-      name: "sunny",
-      fontFamily: "MaterialIcons",
+      name: "cards-playing-club",
+      fontFamily: "MaterialCommunityIcons",
     },
-    label: "Oraculos",
+    label: "Horoscopo",
   },
   PROFILE: {
+    unmountOnBlur: true,
     Component: Profile,
     header: genericHeader,
     name: "profile",
@@ -61,43 +65,46 @@ const BottomNavigation = () => {
         justifyContent: "center",
       }}
     >
-      {screens.map(({ Component, name, icon, label, header }) => (
-        <Tab.Screen
-          key={name}
-          name={name}
-          component={Component}
-          options={{
-            header,
-            tabBarHideOnKeyboard: true,
-            headerShadowVisible: false,
-            tabBarStyle: {
-              height: 60,
-              paddingBottom: 5,
-            },
-            tabBarLabelStyle: {
-              fontSize: 12,
-              lineHeight: 14.7,
-              fontFamily: "Bold",
-            },
-            headerShown: !!header,
-            tabBarActiveTintColor: "secondary",
-            tabBarInactiveTintColor: "gray",
-            tabBarLabel: ({ color }) => (
-              <Text color={color} fontFamily="Bold">
-                {label}
-              </Text>
-            ),
-            tabBarIcon: ({ color }) => (
-              <Icon
-                color={color}
-                name={icon.name}
-                fontFamily={icon.fontFamily}
-                fontSize={25}
-              />
-            ),
-          }}
-        />
-      ))}
+      {screens.map(
+        ({ Component, name, icon, label, header, unmountOnBlur }) => (
+          <Tab.Screen
+            key={name}
+            name={name}
+            component={Component}
+            options={{
+              header,
+              tabBarHideOnKeyboard: true,
+              headerShadowVisible: false,
+              tabBarStyle: {
+                height: 60,
+                paddingBottom: 5,
+              },
+              unmountOnBlur,
+              tabBarLabelStyle: {
+                fontSize: 12,
+                lineHeight: 14.7,
+                fontFamily: "Bold",
+              },
+              headerShown: !!header,
+              tabBarActiveTintColor: "secondary",
+              tabBarInactiveTintColor: "gray",
+              tabBarLabel: ({ color }) => (
+                <Text color={color} fontFamily="Bold">
+                  {label}
+                </Text>
+              ),
+              tabBarIcon: ({ color }) => (
+                <Icon
+                  color={color}
+                  name={icon.name}
+                  fontFamily={icon.fontFamily}
+                  fontSize={25}
+                />
+              ),
+            }}
+          />
+        )
+      )}
     </Tab.Navigator>
   );
 };

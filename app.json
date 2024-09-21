@@ -19,7 +19,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": ["android.permission.RECORD_AUDIO"],
+      "package": "com.miqueasledesmadev.tarot_arcano_front"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -44,6 +46,11 @@
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "4a2ea90f-5675-4d1e-8d43-66c99328d0c9"
+      }
+    }
   }
 }

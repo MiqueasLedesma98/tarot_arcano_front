@@ -3,8 +3,10 @@ import { HeaderDetails, Review } from "../components";
 import { Box, Button, Image, ScrollDiv, Tag, Text } from "react-native-magnus";
 import { useRoute } from "@react-navigation/native";
 import { useFetch } from "../hooks";
-
-const tags = ["Vidente", "Amor", "Luna llena"];
+import { ActivityIndicator } from "react-native";
+import NewComment from "../components/NewComment";
+import { navigate } from "../helpers";
+import { stackRoutesNames } from "../routers/stackRoutesNames";
 
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
@@ -13,7 +15,7 @@ const Details = ({}) => {
 
   const { data = {} } = route.params;
 
-  const { data: reviews } = useFetch({
+  const { data: reviews, loading } = useFetch({
     fetch: true,
     url: `/reviews/${data._id}`,
   });
@@ -49,20 +51,6 @@ const Details = ({}) => {
             </Tag>
           ))}
         </Box>
-        <Box flexDir="row" w={"95%"} alignSelf="center">
-          <Image
-            source={require("../resources/house_icon.png")}
-            w={22}
-            h={22}
-            mx={"lg"}
-          />
-          <Text fontSize={"xl"} fontFamily="Regular" color="gray">
-            Lives in{" "}
-            <Text fontSize={"xl"} fontFamily="Medium" color="gray-dark">
-              Caracas, Venezuela
-            </Text>
-          </Text>
-        </Box>
 
         <Box w={"90%"} h={1} bg="primary" my={"xl"} alignSelf="center" />
 
@@ -83,13 +71,22 @@ const Details = ({}) => {
           </Text>
 
           <Box mt={"xl"}>
+            {!reviews[0] && !loading && (
+              <Text fontFamily="Regular" fontSize={"xl"} color="gray">
+                No hay comentarios
+              </Text>
+            )}
+
             {reviews?.map((review) => (
               <Review key={review._id} data={review} />
             ))}
+            {loading && <ActivityIndicator size={25} color={"#000"} />}
           </Box>
         </Box>
+        <NewComment />
       </ScrollDiv>
       <Button
+        onPress={() => navigate(stackRoutesNames.PAY_SERVICE, { data })}
         rounded={10}
         bg="primary"
         color="#000"
