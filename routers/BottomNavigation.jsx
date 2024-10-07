@@ -11,7 +11,7 @@ const BottomRoutes = {
     unmountOnBlur: false,
     name: "Inicio",
     Component: Home,
-    header: HeaderDetails,
+    header: () => <></>,
     icon: {
       name: "home",
       fontFamily: "Foundation",

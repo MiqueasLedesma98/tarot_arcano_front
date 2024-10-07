@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useAuthStore } from "../stores";
 import { api } from "../axios";
 import {
+  Chat,
   Login,
   PayService,
   Recover,
@@ -61,6 +62,12 @@ const StackRoutes = {
   PAY_SERVICE: {
     name: stackRoutesNames.PAY_SERVICE,
     Component: PayService,
+    auth: true,
+    header: false,
+  },
+  CHAT_SERVICE: {
+    name: stackRoutesNames.CHAT_SERVICE,
+    Component: Chat,
     auth: true,
     header: false,
   },

@@ -11,3 +11,4 @@ export { default as Settings } from "./Settings";
 export { default as Verification } from "./Verification";
 export { default as Welcome } from "./Welcome";
 export { default as PayService } from "./PayService";
+export { default as Chat } from "./Chat";

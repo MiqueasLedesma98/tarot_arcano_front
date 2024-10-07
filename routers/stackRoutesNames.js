@@ -7,4 +7,5 @@ export const stackRoutesNames = {
   VERIFICATION: "Verificación",
   DETAILS: "Detalles",
   PAY_SERVICE: "Comprar",
+  CHAT_SERVICE: "Chat",
 };

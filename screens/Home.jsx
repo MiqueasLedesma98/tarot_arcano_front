@@ -16,7 +16,24 @@ const Home = () => {
 
   return (
     <Box flex={1} w={"90%"} alignSelf="center">
-      <Button bg="transparent">
+      <Text
+        fontFamily="Bold"
+        fontSize={"4xl"}
+        my={"2xl"}
+        color="#191970"
+        textAlign="center"
+      >
+        ARCANO
+      </Text>
+
+      <Button
+        bg="transparent"
+        onPress={() =>
+          navigate(stackRoutesNames.CHAT_SERVICE, {
+            _id: "66ee08c0ded49463f9bd6ba5",
+          })
+        }
+      >
         <Icon
           fontFamily="Ionicons"
           name="notifications"

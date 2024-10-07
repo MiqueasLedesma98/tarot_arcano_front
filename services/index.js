@@ -1,4 +1,5 @@
-export * from "./registerService";
+export * from "./chatService";
 export * from "./oraculoService";
-export * from "./verification";
+export * from "./registerService";
 export * from "./reviewService";
+export * from "./verification";
